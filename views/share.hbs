@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}} - GPTShare</title>
+  <meta name="description" content="{{previewText}}">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-void: #000000;
+      --bg-deep: rgba(8, 8, 10, 1);
+      --chrome-light: rgba(200, 205, 215, 0.12);
+      --chrome-bright: rgba(220, 225, 235, 0.85);
+      --chrome-shimmer: rgba(255, 255, 255, 0.95);
+      --silver-edge: rgba(180, 190, 200, 0.3);
+      --silver-glow: rgba(160, 180, 200, 0.15);
+      --text-chrome: rgba(245, 248, 252, 0.95);
+      --text-silver: rgba(200, 210, 220, 0.75);
+      --text-dim: rgba(140, 150, 160, 0.5);
+      --iridescent: linear-gradient(135deg, 
+        rgba(138, 180, 248, 0.15) 0%, 
+        rgba(200, 160, 255, 0.15) 25%,
+        rgba(138, 180, 248, 0.15) 50%,
+        rgba(255, 180, 200, 0.15) 75%,
+        rgba(138, 180, 248, 0.15) 100%);
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      background: var(--bg-void);
+      color: var(--text-chrome);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      letter-spacing: 0.02em;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(138, 180, 248, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, rgba(200, 160, 255, 0.06) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 120px 32px 60px;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      margin-bottom: 64px;
+      text-align: center;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--chrome-bright);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      opacity: 0.7;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    .share-card {
+      background: linear-gradient(165deg, 
+        rgba(20, 20, 24, 0.6) 0%, 
+        rgba(10, 10, 12, 0.8) 50%,
+        rgba(15, 15, 18, 0.7) 100%);
+      border: 1px solid var(--chrome-light);
+      border-radius: 24px;
+      padding: 56px;
+      backdrop-filter: blur(40px);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 100px rgba(138, 180, 248, 0.1);
+    }
+
+    .share-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 20%,
+        rgba(138, 180, 248, 0.6) 50%,
+        rgba(255, 255, 255, 0.4) 80%,
+        transparent 100%);
+      opacity: 0.6;
+    }
+
+    .share-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: var(--iridescent);
+      background-size: 200% 100%;
+      animation: shimmer 8s linear infinite;
+      opacity: 0.15;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    .metallic-accent {
+      position: absolute;
+      top: 50%;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(200, 210, 220, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .share-title {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+      color: var(--chrome-shimmer);
+      position: relative;
+      z-index: 1;
+      line-height: 1.2;
+      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.95) 0%, 
+        rgba(200, 210, 230, 0.9) 50%,
+        rgba(255, 255, 255, 0.95) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .share-meta {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 48px;
+      font-size: 13px;
+      color: var(--text-dim);
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.03em;
+    }
+
+    .share-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--chrome-light);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .share-meta-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .share-summary {
+      position: relative;
+      z-index: 1;
+    }
+
+    .read-time-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--chrome-bright);
+      margin-bottom: 24px;
+      opacity: 0.6;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+
+    .read-time-label::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--chrome-bright), transparent);
+      opacity: 0.5;
+    }
+
+    .summary-content {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--text-silver);
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .summary-content p {
+      margin-bottom: 20px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .summary-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .summary-content h1,
+    .summary-content h2,
+    .summary-content h3,
+    .summary-content h4 {
+      color: var(--chrome-shimmer);
+      margin: 32px 0 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.15);
+    }
+
+    .summary-content h1 { font-size: 28px; }
+    .summary-content h2 { font-size: 24px; }
+    .summary-content h3 { font-size: 20px; }
+    .summary-content h4 { font-size: 18px; }
+
+    .summary-content ul,
+    .summary-content ol {
+      margin: 20px 0;
+      padding-left: 28px;
+    }
+
+    .summary-content li {
+      margin-bottom: 12px;
+      color: var(--text-silver);
+      position: relative;
+    }
+
+    .summary-content li::marker {
+      color: var(--chrome-bright);
+    }
+
+    .summary-content code {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--chrome-light);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+      font-size: 15px;
+      color: var(--chrome-bright);
+      box-shadow: 0 0 10px rgba(138, 180, 248, 0.1);
+    }
+
+    .summary-content pre {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--chrome-light);
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 24px 0;
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .summary-content pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text-silver);
+      box-shadow: none;
+    }
+
+    .summary-content a {
+      color: var(--chrome-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(220, 225, 235, 0.3);
+      transition: all 0.3s ease;
+      text-shadow: 0 0 10px rgba(138, 180, 248, 0.3);
+    }
+
+    .summary-content a:hover {
+      border-bottom-color: var(--chrome-bright);
+      text-shadow: 0 0 20px rgba(138, 180, 248, 0.6);
+    }
+
+    .key-points {
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(20, 20, 25, 0.4));
+      border: 1px solid var(--chrome-light);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 48px;
+      backdrop-filter: blur(30px);
+      position: relative;
+      z-index: 1;
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .key-points::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+      opacity: 0.5;
+    }
+
+    .key-points-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--chrome-bright);
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+
+    .key-points ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .key-points li {
+      padding-left: 28px;
+      margin-bottom: 16px;
+      position: relative;
+      color: var(--text-silver);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .key-points li:last-child {
+      margin-bottom: 0;
+    }
+
+    .key-points li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      background: linear-gradient(135deg, var(--chrome-bright), rgba(138, 180, 248, 0.5));
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(138, 180, 248, 0.5);
+    }
+
+    .share-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--chrome-light);
+      position: relative;
+      z-index: 1;
+      margin-top: 24px;
+    }
+
+    /* Toast for clipboard feedback */
+    .gptshare-toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 36px;
+      background: rgba(30, 30, 34, 0.95);
+      color: var(--text-chrome);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+      z-index: 9999;
+    }
+
+    .gptshare-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .share-footer::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--chrome-bright), transparent);
+      opacity: 0.4;
+    }
+
+    .source-link {
+      font-size: 13px;
+      color: var(--text-silver);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      background: none;
+      border: none;
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0;
+      padding-bottom: 2px;
+    }
+
+    .source-link:hover {
+      color: var(--chrome-bright);
+      border-bottom-color: var(--chrome-bright);
+      text-shadow: 0 0 15px rgba(138, 180, 248, 0.4);
+    }
+
+    .powered-by {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 60px 32px 40px;
+      color: var(--text-dim);
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer p {
+      opacity: 0.4;
+      font-weight: 500;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 60px 20px 32px;
+      }
+
+      .share-card {
+        padding: 32px 24px;
+        border-radius: 20px;
+      }
+
+      .share-title {
+        font-size: 26px;
+      }
+
+      .summary-content {
+        font-size: 16px;
+      }
+
+      .share-meta {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .share-footer {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .key-points {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">✦ GPTShare ✦</div>
+    </div>
+
+    <article class="share-card">
+      <div class="metallic-accent"></div>
+      <h1 class="share-title">Summary</h1>
+      
+      <div class="share-meta">
+        <span class="share-meta-item">
+          <span>{{formattedDate}}</span>
+        </span>
+        <span class="share-meta-item">
+          <span>{{characterCount}} characters</span>
+        </span>
+      </div>
+
+      <div class="share-summary">
+        <div class="read-time-label">{{readTimeMinutesStr}}</div>
+        <div class="summary-content">
+          {{{summaryHtml}}}
+        </div>
+      </div>
+
+      {{#if keyPoints}}
+      {{#if keyPoints.length}}
+      <div class="key-points">
+        <div class="key-points-title">Key Points</div>
+        <ul>
+          {{#each keyPoints}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
+      {{/if}}
+
+      <div class="share-footer">
+        <button id="continue-chat-btn" class="source-link" type="button">Continue in ChatGPT →</button>
+        <div class="powered-by">Powered by Forked.AI</div>
+      </div>
+    </article>
+  </div>
+
+  <footer class="footer">
+    <p>Share knowledge, beautifully.</p>
+  </footer>
+
+  <!-- Hidden plaintext summary used for clipboard or URL construction -->
+  <textarea id="gptshare-summary-text" style="display:none">{{summary}}</textarea>
+
+  <div id="gptshare-toast" class="gptshare-toast" aria-hidden="true"></div>
+
+  <script>
+    (function(){
+      const btn = document.getElementById('continue-chat-btn');
+      const summaryEl = document.getElementById('gptshare-summary-text');
+      const toast = document.getElementById('gptshare-toast');
+      const LIMIT = 2048;
+
+      function showToast(msg, ms=2600){
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(()=> toast.classList.remove('show'), ms);
+      }
+
+      async function copyToClipboard(text){
+        try{
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+        }catch(e){}
+        try{
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return !!ok;
+        }catch(e){
+          return false;
+        }
+      }
+
+      btn.addEventListener('click', async function(e){
+        const summary = (summaryEl && summaryEl.value) ? summaryEl.value : '';
+        const candidate = 'https://chatgpt.com/?q=' + encodeURIComponent(summary);
+        if(candidate.length <= LIMIT){
+          window.open(candidate, '_blank', 'noopener');
+          return;
+        }
+
+        const ok = await copyToClipboard(summary);
+        // open a fresh ChatGPT window (blank chat) — user can paste
+        window.open('https://chat.openai.com/chat', '_blank', 'noopener');
+        if(ok){
+          showToast('Summary copied to clipboard — paste into the new ChatGPT window');
+        } else {
+          showToast('Unable to auto-copy. Please select and copy the summary manually.');
+        }
+      }, false);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "meta-llama/llama-3.1-8b-instruct": {
+    "contextWindowSize": 1,
+    "tokenizerName": "meta-llama/Llama-3.1-8B-Instruct"
+  },
+  "meta-llama/llama-3.2-3b-instruct": {
+    "contextWindowSize": 131072,
+    "tokenizerName": "meta-llama/Llama-3.2-3B-Instruct"
+  }
+}
