@@ -1,16 +1,23 @@
 import { Injectable } from "@nestjs/common";
-import { AutoTokenizer } from "@xenova/transformers";
 import { ConfigService } from "@nestjs/config";
 import { ContextOverflowException } from "../common/exceptions/context-overflow.exception";
+
+// Dynamic import type for @xenova/transformers (ESM-only package)
+type AutoTokenizerType = typeof import("@xenova/transformers").AutoTokenizer;
 
 @Injectable()
 export class TokensService {
   private readonly tokenizerCache: Map<string, any> = new Map();
   private modelConfig: Record<any, any> = {};
+  private AutoTokenizer: AutoTokenizerType | null = null;
 
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
+    // Dynamic import for ESM-only @xenova/transformers
+    const transformers = await import("@xenova/transformers");
+    this.AutoTokenizer = transformers.AutoTokenizer;
+
     try {
       const modelConfigUrl =
         this.configService.get<string>("MODEL_CONFIG_URL")!;
@@ -57,6 +64,10 @@ export class TokensService {
   }
 
   private async getTokenizerOfModel(summaryModel: string) {
+    if (!this.AutoTokenizer) {
+      throw new Error("AutoTokenizer not initialized. Call onModuleInit first.");
+    }
+
     const tokenizerName =
       this.getModelInfoFromConfig(summaryModel).tokenizerName;
     if (!tokenizerName) {
@@ -65,7 +76,7 @@ export class TokensService {
 
     if (!this.tokenizerCache.has(tokenizerName)) {
       console.log(`[TokensService] Loading tokenizer: ${tokenizerName}`);
-      const tokenizer = await AutoTokenizer.from_pretrained(tokenizerName);
+      const tokenizer = await this.AutoTokenizer.from_pretrained(tokenizerName);
       this.tokenizerCache.set(tokenizerName, tokenizer);
     }
 

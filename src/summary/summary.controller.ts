@@ -13,10 +13,8 @@ export class SummaryController {
   @Post()
   async summarize(@Body() body: SummaryRequestDto) {
     const { convo, options } = body;
-    const genPayload = await this.summaryService.buildGenerationPayload(
-      convo,
-      options
-    );
+    const { genPayload, sanitizedTexts, convoLength } =
+      await this.summaryService.buildGenerationPayload(convo, options);
 
     const fullPromptContent = genPayload.messages
       .map((msg) => msg.content)
@@ -28,8 +26,7 @@ export class SummaryController {
       this.summaryService.getModelName()
     );
 
-    const { summaryChoices, sanitizedTexts, convoLength } =
-      await this.summaryService.summarize(genPayload);
+    const { summaryChoices } = await this.summaryService.summarize(genPayload);
     return { summaryChoices, sanitizedTexts, convoLength };
   }
 }

@@ -24,7 +24,11 @@ export class SummaryService {
   async buildGenerationPayload(
     convo: string[],
     options: SummaryOptions = {}
-  ): Promise<ChatGenerationParams> {
+  ): Promise<{
+    genPayload: ChatGenerationParams;
+    sanitizedTexts: string[]; // few sanitized texts for frontend preview
+    convoLength: number;
+  }> {
     if (!convo || convo.length === 0) {
       throw new Error("Conversation array is empty.");
     }
@@ -51,9 +55,9 @@ export class SummaryService {
     // Build single unified text block from convo array
     const convoText = convo
       .map((msg, index) => {
-        const speaker = index % 2 === 0 ? "Speaker 1" : "Speaker 2";
+        const role = index % 2 === 0 ? "User" : "Assistant";
         // return `${speaker}: ${msg}`;
-        return `[${speaker}]: ${msg}`;
+        return `[${role}]: ${msg}`;
       })
       .join("\n");
     fullContent += "\n\n--Convo Start--\n" + convoText + "\n--Convo End--";
@@ -89,15 +93,20 @@ export class SummaryService {
     console.log("[DEBUG] Prompt length: ", fullContent.length);
 
     return {
-      model: this.modelName,
-      messages,
-      stream: false,
+      genPayload: {
+        model: this.modelName,
+        messages,
+        stream: false,
+      },
+      sanitizedTexts: convo
+        .slice(0, 3)
+        .map((msg) => this.truncateString(msg, 50)),
+      convoLength: convo.length,
     };
   }
 
   async summarize(generationPaylaod: ChatGenerationParams): Promise<{
     summaryChoices: string[];
-    sanitizedTexts: string[];
     convoLength: number;
   }> {
     if (!this.openRouter) {
@@ -130,17 +139,9 @@ export class SummaryService {
           summaryChoices
         );
 
-        // Get sanitized texts from the original convo (after sanitization if applied)
-        // Extract only user/assistant messages (exclude system prompt)
-        const sanitizedTexts = generationPaylaod.messages
-          .slice(0, 5)
-          .map((msg) => this.truncateString(msg.content as string, 50));
-        console.log("Sanitized texts: ", sanitizedTexts);
-
         const convoLength = generationPaylaod.messages.length;
         return {
           summaryChoices,
-          sanitizedTexts,
           convoLength,
         };
       }
@@ -155,7 +156,6 @@ export class SummaryService {
 
     return {
       summaryChoices: [],
-      sanitizedTexts: [],
       convoLength: 0,
     };
   }
@@ -166,12 +166,11 @@ export class SummaryService {
     );
   }
 
-  // Simple local truncate to avoid depending on non-module utils file
   private truncateString(str: string, max = 50): string {
     if (!str) return "";
     if (str.length <= max) return str;
     const ellipsis = "...";
-    return str.slice(0, Math.max(0, max - ellipsis.length)) + ellipsis;
+    return str.trim().slice(0, Math.max(0, max - ellipsis.length)) + ellipsis;
   }
 
   getModelName(): string {
