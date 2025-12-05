@@ -13,8 +13,7 @@ export class SummaryService {
 
   constructor(
     private readonly sanitizerService: SanitizerService,
-    private readonly configService: ConfigService,
-    private readonly tokensService: TokensService // TODO: remove later
+    private readonly configService: ConfigService
   ) {
     const apiKey = this.configService.get<string>("OPENROUTER_API_KEY");
     this.openRouter = new OpenRouter({ apiKey });
