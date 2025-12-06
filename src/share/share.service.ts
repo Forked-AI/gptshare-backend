@@ -8,7 +8,8 @@ export class ShareService {
 
   async createShare(payload: CreateShareDto) {
     const previewText =
-      "[Summarized by GPTShare]\n\n" + payload.summary?.slice(0, 100);
+      "[AI Conversation Summary — Shared with GPTShare · Fork AI 🍴]\n\n" +
+      this.trimByWords(payload.summary || "");
     return this.prisma.share.create({
       data: {
         title: payload.title || "Shared by GPTShare",
@@ -37,6 +38,28 @@ export class ShareService {
     }
 
     return share;
+  }
+
+  trimByWords(text: string, maxLength: number = 100): string {
+    // Take a candidate slice up to the max length
+    const candidate = text.slice(0, maxLength);
+    // Find the last whitespace within the candidate by scanning backward once.
+    // This avoids multiple lastIndexOf calls and extra allocations.
+    let lastSpace = -1;
+    for (let i = candidate.length - 1; i >= 0; i--) {
+      if (/\s/u.test(candidate[i])) {
+        lastSpace = i;
+        break;
+      }
+    }
+
+    // If we found a whitespace, cut there to keep the last word whole; otherwise use the hard cutoff
+    let trimmed = lastSpace > 0 ? candidate.slice(0, lastSpace) : candidate;
+
+    // Remove any trailing whitespace and append ellipsis
+    trimmed = trimmed.replace(/\s+$/u, "");
+
+    return trimmed + "...";
   }
 
   async updateShareSummary(id: string, summary: string) {
