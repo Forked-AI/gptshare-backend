@@ -7,12 +7,14 @@ export class ShareService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createShare(payload: CreateShareDto) {
+    const previewText =
+      "[Summarized by GPTShare]\n\n" + payload.summary?.slice(0, 100);
     return this.prisma.share.create({
       data: {
         title: payload.title || "Shared by GPTShare",
         summary: payload.summary || "",
         keyPoints: payload.keyPoints || [],
-        previewText: payload.previewText || "",
+        previewText,
         selectedMessages: payload.selectedMessages || [],
         options: payload.options,
         characterCount: payload.characterCount || 0,
