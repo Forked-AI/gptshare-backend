@@ -19,4 +19,9 @@ export class HealthController {
       () => this.http.pingCheck("nestjs-docs", "https://docs.nestjs.com"),
     ]);
   }
+
+  @Get("waketfup")
+  waketfup() {
+    return "";
+  }
 }
