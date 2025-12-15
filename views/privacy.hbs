@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - GPTShare</title>
+  <meta name="description" content="GPTShare Privacy Policy - Learn how we handle your data when you use our browser extension.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-base: #0a0a0a;
+      --bg-elevated: #141414;
+      --bg-card: #1a1a1a;
+      --bg-hover: #222222;
+      --border: #2a2a2a;
+      --border-hover: #3a3a3a;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1a1;
+      --text-muted: #666666;
+      --accent: #fafafa;
+      --accent-muted: #888888;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .logo:hover {
+      opacity: 0.8;
+    }
+
+    .logo-mark {
+	  width: 24px;
+	  height: 24px;
+	  object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 80px 40px;
+    }
+
+    .content-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 80px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      align-self: start;
+    }
+
+    .sidebar-nav {
+      border-left: 1px solid var(--border);
+      padding-left: 24px;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav ul {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 2px;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 8px 0;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--text-primary);
+    }
+
+    .article {
+      max-width: 720px;
+    }
+
+    .article-header {
+      margin-bottom: 64px;
+    }
+
+    .article-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .article-meta {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .summary-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 64px;
+    }
+
+    .summary-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .summary-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .intro-text {
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 64px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .policy-section {
+      margin-bottom: 56px;
+    }
+
+    .policy-section h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .policy-section h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 32px 0 16px;
+    }
+
+    .policy-section p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .policy-section ul {
+      margin: 20px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .policy-section li {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+	.info-card-warning li:before {
+	  content: '' !important;
+	}
+
+    .policy-section li::before {
+      content: '⛵︎';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+    }
+
+    .policy-section li strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .policy-section a {
+      color: var(--text-primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--text-muted);
+      transition: text-decoration-color 0.15s ease;
+    }
+
+    .policy-section a:hover {
+      text-decoration-color: var(--text-primary);
+    }
+
+    .info-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+
+    .info-card.warning {
+      border-color: #3a2a2a;
+      background: rgba(40, 20, 20, 0.5);
+    }
+
+    .info-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .info-card.warning .info-card-label {
+      color: #888;
+    }
+
+    .info-card ul {
+      margin: 0;
+    }
+
+    .info-card li {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .info-card li:last-child {
+      margin-bottom: 0;
+    }
+
+    .feature-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+
+    .feature-box-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .feature-box p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .contact-section {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      margin-top: 64px;
+      text-align: center;
+    }
+
+    .contact-section h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .contact-section p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .contact-email {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--bg-base);
+      background: var(--text-primary);
+      text-decoration: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      transition: opacity 0.15s ease;
+    }
+
+    .contact-email:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-text strong {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    @media (max-width: 1024px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .article {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 24px;
+      }
+
+      .main-content {
+        padding: 48px 24px;
+      }
+
+      .article-title {
+        font-size: 36px;
+      }
+
+      .article-header {
+        margin-bottom: 48px;
+      }
+
+      .intro-text {
+        font-size: 16px;
+        margin-bottom: 48px;
+        padding-bottom: 48px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .contact-section {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="header">
+      <div class="header-inner">
+        <a href="/" class="logo">
+		<img src="/assets/gptshare-icon-128.png" alt="GPTShare" class="logo-mark">
+		GPTShare
+        </a>
+        <nav class="nav-links">
+          <a href="https://forkai.tech">Home</a>
+          <a href="/docs/privacy"> Privacy</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="content-grid">
+        <aside class="sidebar">
+          <nav class="sidebar-nav">
+            <div class="sidebar-title">On this page</div>
+            <ul>
+              <li><a href="#what-we-collect">1. What We Collect</a></li>
+              <li><a href="#how-we-use">2. How We Use Your Data</a></li>
+              <li><a href="#third-parties">3. Third Parties</a></li>
+              <li><a href="#redaction">4. Sensitive Info Redaction</a></li>
+              <li><a href="#retention">5. Data Retention</a></li>
+              <li><a href="#security">6. Security</a></li>
+              <li><a href="#your-rights">7. Your Rights</a></li>
+              <li><a href="#contact">8. Contact</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <article class="article">
+          <header class="article-header">
+            <h1 class="article-title">Privacy Policy</h1>
+            <p class="article-meta">Last updated {{lastUpdated}}</p>
+          </header>
+
+          <div class="summary-box">
+            <div class="summary-label">Summary</div>
+            <p class="summary-text">We only process the specific chat content you choose to share. We don't track you, don't collect personal information, and don't use analytics. Your selected content is sent to our server for AI summarization, and the resulting summary is stored to generate a shareable link.</p>
+          </div>
+
+          <p class="intro-text">GPTShare is a browser extension developed by Forked.AI that allows you to select, summarize, and share portions of your AI conversations. This Privacy Policy explains how we handle your data.</p>
+
+          <section id="what-we-collect" class="policy-section">
+            <h2>What Data We Collect</h2>
+            
+            <h3>Content You Choose to Share</h3>
+            <p>When you use GPTShare to create a shareable summary, we collect:</p>
+            <ul>
+              <li><strong>Selected conversation content</strong> - The specific AI chat messages you highlight and choose to share (not your entire conversation history)</li>
+              <li><strong>Your formatting preferences</strong> - Summary length, writing style, and whether to redact sensitive information</li>
+            </ul>
+
+            <div class="info-card warning">
+              <div class="info-card-label">🔅 We do not collect</div>
+              <ul>
+                <li>Your name, email, or any personal identifiers</li>
+                <li>Your browsing history or activity on other websites</li>
+                <li>Passwords, authentication tokens, or financial information</li>
+                <li>Location data or device identifiers</li>
+                <li>Any content you don't explicitly select to share</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="how-we-use" class="policy-section">
+            <h2>How We Use Your Data</h2>
+            <p>Your selected content is used solely to:</p>
+            <ul>
+              <li><strong>Generate a summary</strong> - Your content is transmitted to our backend server and processed using AI language models to create a concise summary</li>
+              <li><strong>Create a shareable link</strong> - The generated summary is stored in our database and assigned a unique URL that you can share with others</li>
+              <li><strong>Display the shared content</strong> - When someone visits your share link, we render the summary in a readable format</li>
+            </ul>
+          </section>
+
+          <section id="third-parties" class="policy-section">
+            <h2>Data Processing & Third Parties</h2>
+            
+            <h3>Infrastructure</h3>
+            <ul>
+              <li><strong>Backend server</strong> - Hosted on Render</li>
+              <li><strong>Database</strong> - Prisma Postgres</li>
+            </ul>
+
+            <h3>AI Processing</h3>
+            <p>Your selected content is processed through <strong>OpenRouter</strong>, which routes requests to AI language models for summarization. OpenRouter does not store or log the content of requests sent through their service.</p>
+            <p>We do not sell, rent, or share your data with any other third parties.</p>
+          </section>
+
+          <section id="redaction" class="policy-section">
+            <h2>Sensitive Information Redaction</h2>
+            
+            <div class="feature-box">
+              <div class="feature-box-title">Privacy Protection</div>
+              <p>GPTShare includes an optional "Hide Sensitive Info" feature that automatically redacts potentially sensitive information from your summary.</p>
+            </div>
+
+            <p>When enabled, our AI will detect and redact:</p>
+            <ul>
+              <li>Email addresses and phone numbers</li>
+              <li>Passwords and authentication credentials</li>
+              <li>Personal identification numbers</li>
+              <li>Other identifiable personal details</li>
+            </ul>
+            <p>We recommend reviewing your summary before sharing.</p>
+          </section>
+
+          <section id="retention" class="policy-section">
+            <h2>Data Retention</h2>
+            <ul>
+              <li><strong>Shared summaries</strong> are stored indefinitely to keep share links working</li>
+              <li>User-controlled deletion and automatic expiration coming in future updates</li>
+              <li>Contact us to request manual deletion</li>
+            </ul>
+          </section>
+
+          <section id="security" class="policy-section">
+            <h2>Data Security</h2>
+            <p>We implement reasonable security measures to protect your data:</p>
+            <ul>
+              <li>All data transmission uses HTTPS encryption</li>
+              <li>Database access is restricted and authenticated</li>
+              <li>We do not store unnecessary personal information</li>
+            </ul>
+          </section>
+
+          <section id="your-rights" class="policy-section">
+            <h2>Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+              <li><strong>Know</strong> what data we collect</li>
+              <li><strong>Request deletion</strong> of your shared summaries</li>
+              <li><strong>Choose</strong> not to use the extension</li>
+            </ul>
+          </section>
+
+          <section class="policy-section">
+            <h2>Children's Privacy</h2>
+            <p>GPTShare is not intended for use by children under 13 years of age. We do not knowingly collect data from children.</p>
+          </section>
+
+          <section class="policy-section">
+            <h2>Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. Changes will be reflected in the "Last updated" date above. Continued use of the extension after changes constitutes acceptance of the updated policy.</p>
+          </section>
+
+          <section id="contact" class="contact-section">
+            <h3>Questions?</h3>
+            <p>If you have questions or want to request data deletion, reach out to developer.</p>
+            <a href="mailto:{{contactEmail}}" class="contact-email">{{contactEmail}}</a>
+          </section>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p class="footer-text"><strong>GPTShare</strong> · Smartly Curate & Share AI Chats</p>
+    </footer>
+  </div>
+</body>
+</html>

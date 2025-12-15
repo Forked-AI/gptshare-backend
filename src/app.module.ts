@@ -3,6 +3,7 @@ import { SummaryModule } from "./summary/summary.module";
 import { HealthModule } from "./health/health.module";
 import { ShareModule } from "./share/share.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { DocsModule } from "./docs/docs.module";
 import { ConfigModule } from "@nestjs/config";
 import * as Joi from "joi";
 
@@ -12,6 +13,7 @@ import * as Joi from "joi";
     SummaryModule,
     HealthModule,
     ShareModule,
+    DocsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
